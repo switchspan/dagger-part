@@ -1,26 +1,14 @@
 import unittest
 
-from pdfrw import PdfReader
-
-
-class PdfForm:
-    """Loads and manages PDF forms"""
-
-    def __init__(self, pdf_file_path):
-        """Constructor for PdfForm"""
-        self.pdf_file_path = pdf_file_path
-        file_data = PdfReader(pdf_file_path)
-        if isinstance(file_data.Info["/Author"], type(None)):
-            raise Exception("Invalid PDF form file!")
-        self.author = file_data.Info["/Author"][1:-1]
-        self.form_name = file_data.Info["/Title"][1:-1]
-        self.data = file_data
+from pdfform import PdfForm
 
 
 class TestPdfForm(unittest.TestCase):
     def test_loading_validform_returns_FEMA_author(self):
         form = PdfForm('test_ics_213.pdf')
-        self.assertEqual(form.author, "FEMA")  # add assertion here
+        print("Meta data = ", form.metadata)
+        print("Form data =", form.data)
+        self.assertEqual(form.metadata["author"], "FEMA")
 
     def test_loading_invalidform_raises_exception(self):
         with self.assertRaises(Exception):
