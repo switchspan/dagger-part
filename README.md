@@ -1,3 +1,4 @@
+[![Python application](https://github.com/switchspan/fema-tools/actions/workflows/python-app.yml/badge.svg?branch=main)](https://github.com/switchspan/fema-tools/actions/workflows/python-app.yml)
 # fema-tools
 
 The FEMA tools project is a set of sofware intended to be installed on a RaspberryPi to ease logging and record keeping
