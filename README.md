@@ -63,6 +63,7 @@ Add additional notes about how to deploy this on a live system
 
 * [Python 3](https://www.python.org/download/releases/3.0/) - Programming language used
 * [PyCharm](https://www.jetbrains.com/pycharm/) - Editor used
+* [pytest](https://docs.pytest.org/en/7.0.x/contents.html#) - Unit test framework used
 
 ## Versioning
 

@@ -4,17 +4,17 @@ import pytest
 
 from pdfform import PdfForm
 
-this_dir = os.path.dirname(os.path.abspath(__file__))
+THIS_DIR = os.path.dirname(os.path.abspath(__file__))
 
 
 @pytest.fixture()
 def valid_pdf():
-    return os.path.join(this_dir, 'test_ics_213.pdf')
+    return os.path.join(THIS_DIR, 'test_ics_213.pdf')
 
 
 @pytest.fixture()
 def invalid_pdf():
-    return os.path.join(this_dir, 'invalid_file.pdf')
+    return os.path.join(THIS_DIR, 'invalid_file.pdf')
 
 
 def test_loading_valid_form_returns_fema_author(valid_pdf):
@@ -25,9 +25,9 @@ def test_loading_valid_form_returns_fema_author(valid_pdf):
 
 
 def test_loading_invalid_form_raises_exception(invalid_pdf):
-    with pytest.raises(Exception) as pdferror:
+    with pytest.raises(Exception) as pdf_error:
         form = PdfForm(invalid_pdf)
-    assert pdferror.type is Exception
+    assert pdf_error.type is Exception
 
 
 def test_get_form_name_with_valid_form_returns_name(valid_pdf):

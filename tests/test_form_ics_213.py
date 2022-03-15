@@ -4,11 +4,12 @@ import pytest
 
 from ics_forms import ICS213Form
 
+THIS_DIR = os.path.dirname(os.path.abspath(__file__))
+
 
 @pytest.fixture()
 def valid_pdf():
-    this_dir = os.path.dirname(os.path.abspath(__file__))
-    return os.path.join(this_dir, 'test_ics_213.pdf')
+    return os.path.join(THIS_DIR, 'test_ics_213.pdf')
 
 
 def test_loading_valid_pdf_returns_fema_author(valid_pdf):
