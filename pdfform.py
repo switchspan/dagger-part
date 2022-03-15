@@ -1,12 +1,6 @@
 from pdfrw import PdfReader
 
-# PDF form constants
-ANNOT_KEY = '/Annots'
-ANNOT_FIELD_KEY = '/T'
-ANNOT_VAL_KEY = '/V'
-ANNOT_RECT_KEY = '/Rect'
-SUBTYPE_KEY = '/Subtype'
-WIDGET_SUBTYPE_KEY = '/Widget'
+from constants import *
 
 
 class PdfForm:
@@ -43,6 +37,8 @@ class PdfForm:
                             val = annotation[ANNOT_VAL_KEY]
                             if val:
                                 data[key] = val[1:-1]
+                            else:
+                                data[key] = ''
 
         return data
 

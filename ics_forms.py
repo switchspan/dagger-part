@@ -42,19 +42,26 @@ class ICS213Form(PdfForm):
 class NotableActivity:
     """Holds a notable activity for an ICS 214 activity log"""
 
-    def __init__(self, datetime, activity, row):
+    def __init__(self, datetime, activity, row=None):
         self.datetime = datetime
         self.activity = activity
         self.row = row
+
+    def __str__(self):
+        return f'NotableActivity({self.datetime}, {self.activity}, {self.row})'
 
 
 class Resource:
     """Holds a resource for an ICS 214 activity log"""
 
-    def __init__(self, name, position, home_agency):
+    def __init__(self, name, position, home_agency, row=None):
         self.name = name
         self.position = position
         self.home_agency = home_agency
+        self.row = row
+
+    def __str__(self):
+        return f'Resource({self.name}, {self.position}, {self.home_agency}, {self.row})'
 
 
 # TODO: Keep mapping the fields below
@@ -70,14 +77,11 @@ class ICS214Form(PdfForm):
         "Signature_21": "",
         "DateTime_15": "prepared_on_datetime",
         "1 Incident Name_20": "incident_name",
-        "8 Prepared by Name_2": "prepared_by_name",
-        "PositionTitle_16": "prepared_by_name2",
+        "8 Prepared by Name_2": "prepared_by_name2",
+        "PositionTitle_16": "prepared_by_position2",
         "Signature_22": "",
         "DateTime_16": "prepared_on_datetime2"
     }
-
-    # TODO: Add logic to track notable activity rows
-    # TODO: Add code to update the resources assigned
     RESOURCE_FIELD_MAPPING = [
         (1, "NameRow1_3", "ICS PositionRow1", "Home Agency and UnitRow1"),
         (2, "NameRow2_3", "ICS PositionRow2", "Home Agency and UnitRow2"),
@@ -88,7 +92,6 @@ class ICS214Form(PdfForm):
         (7, "NameRow7", "ICS PositionRow7", "Home Agency and UnitRow7"),
         (8, "NameRow8", "ICS PositionRow8", "Home Agency and UnitRow8")
     ]
-
     ACTIVITY_FIELD_MAPPING = [
         (1, "DateTimeRow1", "Notable ActivitiesRow1"),
         (2, "DateTimeRow2", "Notable ActivitiesRow2"),
@@ -151,12 +154,50 @@ class ICS214Form(PdfForm):
         (59, "DateTimeRow35", "Notable ActivitiesRow35"),
         (60, "DateTimeRow36", "Notable ActivitiesRow36")
     ]
-
     MAX_RESOURCE_RECORDS = 8
     MAX_ACTIVITY_RECORDS = 60
 
+    # class variables
     resources_assigned = []
     notable_activities = []
+    incident_name = ''
+    recorder_name = ''
+    recorder_position = ''
+    recorder_agency = ''
+    prepared_by_name = ''
+    prepared_by_position = ''
+    prepared_on_datetime = ''
+    prepared_by_name2 = ''
+    prepared_by_position2 = ''
+    prepared_on_datetime2 = ''
+
+    # TODO: Add logic to track notable activity rows
+    # TODO: Add code to update the resources assigned
+
+    def __init__(self, pdf_file_path):
+        super().__init__(pdf_file_path)
+        self.__map_resources()
+        self.__map_activities()
+
+    def __map_resources(self):
+        """Extracts the PDF form data for ICS 214 resources into a list of objects"""
+        for rTuple in self.RESOURCE_FIELD_MAPPING:
+            row, name, position, home_agency = rTuple
+            resource = Resource(self.data[name], self.data[position], self.data[home_agency], row)
+            self.resources_assigned.append(resource)
+
+    def __map_activities(self):
+        """Extracts the PDF form data for ICS 214 notable activities into a list of objects"""
+        for aTuple in self.ACTIVITY_FIELD_MAPPING:
+            row, datetime, activity = aTuple
+            activity = NotableActivity(self.data[datetime], self.data[activity], row)
+            self.notable_activities.append(activity)
+
+    def __get_resource_at_row(self, row):
+        return self.resources_assigned[row]
+
+    def __get_activity_at_row(self, row):
+        return self.notable_activities[row]
 
     def number_of_resources_assigned(self):
         return len(self.resources_assigned)
