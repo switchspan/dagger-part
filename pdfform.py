@@ -31,8 +31,8 @@ class PdfForm:
         self.__map_to_fields()
 
     def __extract_form_data(self, file_data):
-        data = {}
         """Extracts the PDF form data into a python dictionary"""
+        data = {}
         for page in file_data.pages:
             annotations = page[ANNOT_KEY]
             if not isinstance(annotations, type(None)):
@@ -47,6 +47,7 @@ class PdfForm:
         return data
 
     def __map_to_fields(self):
+        """Maps field data found in a dictionary from the PDF to properties on the class using the FIELD_MAPPING dictionary"""
         # print(str(self.FIELD_MAPPING))
         fields = {}
         if self.FIELD_MAPPING:
@@ -57,6 +58,7 @@ class PdfForm:
             self.__dict__.update(fields)
 
     def get_form_name(self):
+        """Gets the form name from the metadata"""
         return self.metadata['form_name']
 
     def __str__(self):

@@ -13,10 +13,11 @@ WIDGET_SUBTYPE_KEY = '/Widget'
 
 
 def extract_form_fields(pdf_file_path):
+    """
+    Extracts the PDF form data into a python dictionary
+    """
     file_data = PdfReader(pdf_file_path)
-
     data = {}
-    """Extracts the PDF form data into a python dictionary"""
     for page in file_data.pages:
         annotations = page[ANNOT_KEY]
         if not isinstance(annotations, type(None)):
@@ -51,6 +52,12 @@ def format_dictionary(dict):
 
 
 def main(argv):
+    """
+    Takes in a PDF file path argument and saves out it's field names as a Python dictionary for use in mapping to a
+    Python class for handling the PDF file.
+    :param argv: input and output file parameters
+    :return: output of the dictionary and saves dictionary to file ('dump_contents.txt' is the default)
+    """
     inputfile = ''
     outputfile = ''
 
