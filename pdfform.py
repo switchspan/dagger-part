@@ -13,6 +13,7 @@ class PdfForm:
     """Base class which loads and manages PDF forms
     uses the pdfrw library and notes found here: https://akdux.com/python/2020/10/31/python-fill-pdf-files.html
     """
+    FIELD_MAPPING = {}
     metadata = {}
 
     def __init__(self, pdf_file_path):
@@ -27,6 +28,7 @@ class PdfForm:
         self.pdfReader = file_data
         # load in all of the fields to a dictionary
         self.data = self.__extract_form_data(file_data)
+        self.__map_to_fields()
 
     def __extract_form_data(self, file_data):
         data = {}
@@ -44,5 +46,19 @@ class PdfForm:
 
         return data
 
+    def __map_to_fields(self):
+        # print(str(self.FIELD_MAPPING))
+        fields = {}
+        if self.FIELD_MAPPING:
+            if self.data:
+                for key, val in self.FIELD_MAPPING.items():
+                    if val:
+                        fields[val] = self.data[key]
+            self.__dict__.update(fields)
+
+    def get_form_name(self):
+        return self.metadata['form_name']
+
     def __str__(self):
-        return self.metadata
+        filepath = self.metadata['pdf_file_path']
+        return f'PdfForm(\'{filepath}\')\r\n\tMetadata = {self.metadata}\r\n\tData = {self.data}'
